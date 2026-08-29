@@ -1,0 +1,29 @@
+{
+  "name": "traceroot-agent",
+  "version": "0.1.0",
+  "description": "Evidence-driven agentic workflow for production incident investigation.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test",
+    "baseline": "tsx src/baseline/run.ts",
+    "agent": "tsx src/agent/run.ts",
+    "evaluate": "tsx src/evaluator/run.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "zod": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  }
+}
