@@ -1,9 +1,16 @@
 import { readdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 
+import { readTextFile } from "../lib/filesystem.js";
+
 export interface RepositoryFile {
   path: string;
   size: number;
+}
+
+export interface InspectedFile {
+  path: string;
+  content: string;
 }
 
 export async function listRepositoryFiles(
@@ -11,25 +18,23 @@ export async function listRepositoryFiles(
 ): Promise<RepositoryFile[]> {
   const results: RepositoryFile[] = [];
 
-  async function walk(directory: string): Promise<void> {
-    const entries = await readdir(directory, {
+  async function walk(currentPath: string): Promise<void> {
+    const entries = await readdir(currentPath, {
       withFileTypes: true,
     });
 
     for (const entry of entries) {
-      const fullPath = join(directory, entry.name);
-
-      if (entry.name === "node_modules") {
-        continue;
-      }
-
-      if (entry.name === "dist") {
-        continue;
-      }
+      const fullPath = join(currentPath, entry.name);
 
       if (entry.isDirectory()) {
+        if (
+          entry.name === "node_modules" ||
+          entry.name === ".git"
+        ) {
+          continue;
+        }
+
         await walk(fullPath);
-        continue;
       }
 
       if (entry.isFile()) {
@@ -48,4 +53,16 @@ export async function listRepositoryFiles(
   return results.sort((a, b) =>
     a.path.localeCompare(b.path),
   );
+}
+
+export async function inspectRepositoryFile(
+  repositoryPath: string,
+  filePath: string,
+): Promise<InspectedFile> {
+  const content = await readTextFile(filePath);
+
+  return {
+    path: filePath,
+    content,
+  };
 }
