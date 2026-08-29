@@ -26,7 +26,7 @@ export async function createOrder(
       return order;
     });
   } finally {
-    connection.release();
+   
   }
 }
 
