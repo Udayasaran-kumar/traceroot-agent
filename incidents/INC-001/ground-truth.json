@@ -1,0 +1,55 @@
+{
+    "incident": {
+      "id": "INC-001",
+      "service": "orders-api"
+    },
+    "symptoms": {
+      "failingEndpoint": "POST /orders",
+      "healthyEndpoint": "GET /health",
+      "error": "Connection pool exhausted",
+      "failureUnderIncreasedRequestVolume": true
+    },
+    "rootCause": {
+      "category": "resource_leak",
+      "resource": "database_connection",
+      "mechanism": "A database connection is acquired by createOrder but is not released after the operation."
+    },
+    "localization": {
+      "file": "src/orders/service.ts",
+      "function": "createOrder",
+      "block": "finally"
+    },
+    "causalChain": [
+      "createOrder acquires a database connection from the connection pool.",
+      "The acquired connection is not released after the order operation completes.",
+      "Active database connections therefore accumulate across requests.",
+      "The connection pool has a maximum capacity of 5 active connections.",
+      "Once the pool reaches capacity, subsequent order requests fail with Connection pool exhausted.",
+      "The server converts the resulting exception into an HTTP 500 response."
+    ],
+    "remediation": {
+      "type": "minimal_fix",
+      "file": "src/orders/service.ts",
+      "action": "Restore connection.release() in the finally block of createOrder."
+    },
+    "evidence": {
+      "poolCapacity": [
+        "repository/src/db/pool.ts"
+      ],
+      "connectionAcquisition": [
+        "repository/src/orders/service.ts"
+      ],
+      "missingRelease": [
+        "repository/src/orders/service.ts"
+      ],
+      "productionSymptom": [
+        "evidence/application.log"
+      ],
+      "stackTrace": [
+        "evidence/stacktrace.txt"
+      ],
+      "regressionTests": [
+        "repository/tests/orders.test.ts"
+      ]
+    }
+  }

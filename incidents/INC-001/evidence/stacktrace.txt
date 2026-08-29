@@ -1,0 +1,7 @@
+Error: Connection pool exhausted
+    at ConnectionPool.connect (src/db/pool.ts:12:13)
+    at createOrder (src/orders/service.ts:15:33)
+    at Server.<anonymous> (src/server.ts:23:27)
+    at Server.emit (node:events:518:28)
+    at parserOnIncoming (node:_http_server:1155:12)
+    at HTTPParser.parserOnHeadersComplete (node:_http_common:117:17)
