@@ -9,10 +9,11 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
-    "test": "node --test",
+    "test": "node --import tsx --test src/**/*.test.ts",
     "baseline": "tsx src/baseline/run.ts",
     "agent": "tsx src/agent/run.ts",
-    "evaluate": "tsx src/evaluator/run.ts"
+    "evaluate": "tsx src/evaluator/run.ts",
+    "fixture:test": "cd incidents/INC-001/repository && npm test"
   },
   "engines": {
     "node": ">=22"

@@ -19,12 +19,10 @@ export interface Incident {
   title: string;
   description: string;
   category: IncidentCategory;
-
   evidence: {
     incidentReport: string;
     logs: string[];
     stackTrace?: string;
   };
-
   repositoryPath: string;
 }
