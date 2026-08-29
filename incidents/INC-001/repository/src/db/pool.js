@@ -22,5 +22,8 @@ class ConnectionPool {
     getActiveConnections() {
         return this.activeConnections;
     }
+    getMaxConnections() {
+        return this.maxConnections;
+    }
 }
 export const pool = new ConnectionPool();

@@ -24,7 +24,15 @@ const server = createServer(async (request, response) => {
         response.end();
     }
     catch (error) {
-        console.error(error);
+        const message = error instanceof Error ? error.message : "Unknown error";
+        console.error(JSON.stringify({
+            level: "error",
+            event: "request_failed",
+            method: request.method,
+            path: request.url,
+            error: message,
+            timestamp: new Date().toISOString(),
+        }));
         response.writeHead(500, {
             "content-type": "application/json",
         });
