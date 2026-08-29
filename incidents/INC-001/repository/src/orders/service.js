@@ -14,7 +14,6 @@ export async function createOrder(customerId, amount) {
         });
     }
     finally {
-        connection.release();
     }
 }
 export function getOrderCount() {
