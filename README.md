@@ -1,40 +1,86 @@
 # TraceRoot
 
-Evidence-driven agentic workflow for production incident investigation.
+## Evidence-Driven Production Incident Investigation Agent
 
-## Problem
+TraceRoot is an evidence-driven agentic workflow for investigating production incidents.
 
-Production incident investigation requires engineers to correlate fragmented evidence across logs, source code, stack traces, configuration, tests, and recent changes.
+Instead of immediately producing a root-cause guess, TraceRoot maintains an explicit investigation state, gathers evidence, generates hypotheses, selects the next investigation action based on the current objective, executes tools, and verifies the highest-confidence hypothesis.
 
-## Target User
+The result is a structured root-cause report containing:
 
-Software engineers and on-call developers investigating production incidents.
+- Root cause
+- Exact source location
+- Failure mechanism
+- Causal chain
+- Supporting evidence
+- Confidence
+- Verification result
+- Recommended remediation
 
-## Approach
+---
 
-TraceRoot investigates an incident, evaluates competing root-cause hypotheses, verifies findings where possible, and produces an evidence-backed diagnosis.
+# Why TraceRoot?
 
-## Evaluation
+Production incidents rarely have a single useful source of information.
 
-The project compares a simple baseline against the final agentic workflow using the same controlled incident cases.
+An engineer may need to correlate:
 
-### Primary Metric
+- Incident reports
+- Production logs
+- Stack traces
+- Repository source code
+- Configuration
+- Runtime behavior
+- Regression tests
 
-Root Cause Identification Accuracy.
+A useful investigation agent should answer:
 
-## Status
+1. What evidence do I have?
+2. What does that evidence suggest?
+3. What hypothesis explains the incident?
+4. What evidence is still missing?
+5. What should I investigate next?
+6. Can the hypothesis be verified?
+7. What is the exact root cause?
+8. What remediation should be applied?
 
-🚧 Under development.
+TraceRoot models this investigation process explicitly as state transitions.
 
-## Project Structure
+---
 
-- `src/` — application and workflow code
-- `incidents/` — controlled incident cases
-- `docs/` — architecture and reproduction documentation
-- `baseline/` — baseline implementation
-- `agent/` — agent workflow
-- `evaluator/` — evaluation system
+# Core Architecture
 
-## License
-
-TBD
+```text
+                    Incident
+                       |
+                       v
+                Evidence Collector
+                       |
+                       v
+              Investigation State
+                       |
+                       v
+              Objective-Driven Planner
+                       |
+                       v
+              Investigation Tools
+             /          |           \
+            /           |            \
+   Repository       File         Verification
+      Search      Inspection
+            \           |            /
+             \          |           /
+                       v
+                 State Updater
+                       |
+                       v
+                New Evidence
+                       |
+                       v
+              Hypothesis Generation
+                       |
+                       v
+                  Verification
+                       |
+                       v
+               Root Cause Report
