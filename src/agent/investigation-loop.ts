@@ -10,6 +10,7 @@ import {
 } from "./tool-executor.js";
 import { applyToolResult } from "./state-updater.js";
 import { generateHypotheses } from "./hypothesis-generator.js";
+import { buildRootCauseReport } from "./report-builder.js";
 
 export interface InvestigationLoopOptions {
   maxSteps?: number;
@@ -31,6 +32,18 @@ export async function runInvestigationLoop(
       break;
     }
 
+    if (
+      state.status === "investigating" &&
+      state.hypotheses.length === 0
+    ) {
+      state = {
+        ...state,
+        hypotheses: generateHypotheses(
+          state.evidence,
+        ),
+      };
+    }
+
     const action: InvestigationAction | null =
       planNextAction(state);
 
@@ -47,19 +60,21 @@ export async function runInvestigationLoop(
       action,
       result,
     );
+  }
 
-    if (
-      action.tool === "search_repository" &&
-      action.input.query === "connection.release" &&
-      state.hypotheses.length === 0
-    ) {
-      state = {
-        ...state,
-        hypotheses: generateHypotheses(
-          state.evidence,
-        ),
-      };
-    }
+  if (
+    state.status === "confirmed" &&
+    state.verification !== undefined
+  ) {
+    state = {
+      ...state,
+      report: buildRootCauseReport(
+        state.incidentId,
+        state.hypotheses,
+        state.verification,
+        state.evidence,
+      ),
+    };
   }
 
   return state;

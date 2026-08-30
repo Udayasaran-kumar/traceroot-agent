@@ -62,4 +62,33 @@ test("runs the investigation loop through hypothesis verification", async () => 
     result.verification?.status,
     "confirmed",
   );
+
+  assert.ok(
+    result.report,
+  );
+
+  assert.equal(
+    result.report?.incidentId,
+    "INC-001",
+  );
+
+  assert.match(
+    result.report?.rootCause ?? "",
+    /Database connection leak/,
+  );
+
+  assert.equal(
+    result.report?.location.file,
+    "src/orders/service.ts",
+  );
+
+  assert.match(
+    result.report?.remediation ?? "",
+    /connection\.release\(\)/,
+  );
+
+  assert.equal(
+    result.report?.confidence,
+    0.9,
+  );
 });
