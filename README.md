@@ -4,26 +4,15 @@
 
 TraceRoot is an evidence-driven agentic workflow for investigating production incidents.
 
-Instead of immediately producing a root-cause guess, TraceRoot maintains an explicit investigation state, gathers evidence, generates hypotheses, selects the next investigation action based on the current objective, executes tools, and verifies the highest-confidence hypothesis.
+Instead of immediately guessing a root cause, TraceRoot maintains an explicit investigation state, collects evidence, generates competing hypotheses, selects the next action according to its current objective, executes investigation tools, verifies the highest-confidence hypothesis, and produces a structured root-cause report.
 
-The result is a structured root-cause report containing:
-
-- Root cause
-- Exact source location
-- Failure mechanism
-- Causal chain
-- Supporting evidence
-- Confidence
-- Verification result
-- Recommended remediation
+The system is designed to demonstrate how an agent can move from fragmented production evidence to a verified diagnosis.
 
 ---
 
-# Why TraceRoot?
+## What TraceRoot Solves
 
-Production incidents rarely have a single useful source of information.
-
-An engineer may need to correlate:
+Production incidents often require engineers to correlate multiple sources:
 
 - Incident reports
 - Production logs
@@ -33,54 +22,57 @@ An engineer may need to correlate:
 - Runtime behavior
 - Regression tests
 
-A useful investigation agent should answer:
+TraceRoot turns these sources into an explicit investigation workflow.
 
-1. What evidence do I have?
-2. What does that evidence suggest?
-3. What hypothesis explains the incident?
-4. What evidence is still missing?
-5. What should I investigate next?
-6. Can the hypothesis be verified?
-7. What is the exact root cause?
+The agent continuously answers:
+
+1. What evidence is available?
+2. What hypotheses explain the evidence?
+3. What information is still missing?
+4. What should be investigated next?
+5. Can the leading hypothesis be verified?
+6. Where exactly is the defect?
+7. What is the causal chain?
 8. What remediation should be applied?
-
-TraceRoot models this investigation process explicitly as state transitions.
 
 ---
 
 # Core Architecture
 
 ```text
-                    Incident
-                       |
-                       v
-                Evidence Collector
-                       |
-                       v
-              Investigation State
-                       |
-                       v
-              Objective-Driven Planner
-                       |
-                       v
-              Investigation Tools
-             /          |           \
-            /           |            \
-   Repository       File         Verification
-      Search      Inspection
-            \           |            /
-             \          |           /
-                       v
-                 State Updater
-                       |
-                       v
-                New Evidence
-                       |
-                       v
-              Hypothesis Generation
-                       |
-                       v
-                  Verification
-                       |
-                       v
-               Root Cause Report
+                         Incident
+                            |
+                            v
+                    Incident Loader
+                            |
+                            v
+                    Evidence Collector
+                            |
+                            v
+                  Investigation State
+                            |
+                            v
+                Objective-Driven Planner
+                            |
+                            v
+                   Investigation Tools
+                  /          |          \
+                 /           |           \
+        Repository Search  File Inspect  Verification
+                 \           |           /
+                  \          |          /
+                            v
+                     State Updater
+                            |
+                            v
+                  Hypothesis Generation
+                            |
+                            v
+                    Highest-Confidence
+                       Hypothesis
+                            |
+                            v
+                       Verification
+                            |
+                            v
+                   Root Cause Report
