@@ -70,6 +70,8 @@ export function applyToolResult(
     ...state,
   };
 
+  const objective = state.currentObjective;
+
   if (action.tool === "search_repository") {
     if (!Array.isArray(result)) {
       throw new Error(
@@ -84,12 +86,16 @@ export function applyToolResult(
       ...searchResultsToEvidence(matches),
     ]);
 
-    if (action.input.query === "pool.connect") {
+    if (
+      objective === "find connection acquisition"
+    ) {
       nextState.currentObjective =
         "check connection release";
     }
 
-    if (action.input.query === "connection.release") {
+    if (
+      objective === "check connection release"
+    ) {
       nextState.hypotheses = generateHypotheses(
         nextState.evidence,
       );
