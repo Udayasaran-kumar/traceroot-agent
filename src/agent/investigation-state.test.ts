@@ -22,6 +22,10 @@ test("creates an initialized investigation state", () => {
   assert.deepEqual(state.actions, []);
 
   assert.equal(state.status, "initialized");
+  assert.equal(
+    state.currentObjective,
+    "find connection acquisition",
+  );
   assert.equal(state.verification, undefined);
   assert.equal(state.report, undefined);
 });

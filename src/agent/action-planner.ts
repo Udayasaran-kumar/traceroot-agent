@@ -52,6 +52,7 @@ export function planNextAction(
 
   if (
     state.status === "investigating" &&
+    state.currentObjective === "verify hypothesis" &&
     hypothesis &&
     state.verification === undefined
   ) {

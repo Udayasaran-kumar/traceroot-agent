@@ -5,6 +5,12 @@ import type {
   VerificationResult,
 } from "../domain/investigation.js";
 
+export type InvestigationObjective =
+  | "find connection acquisition"
+  | "check connection release"
+  | "verify hypothesis"
+  | "complete";
+
 export interface InvestigationAction {
   tool:
     | "search_repository"
@@ -20,7 +26,7 @@ export interface InvestigationState {
 
   evidence: EvidenceItem[];
   hypotheses: InvestigationHypothesis[];
-
+  currentObjective: InvestigationObjective;
   verification?: VerificationResult;
   actions: InvestigationAction[];
 
@@ -42,6 +48,7 @@ export function createInvestigationState(
     repositoryPath,
     evidence: [],
     hypotheses: [],
+    currentObjective: "find connection acquisition",
     actions: [],
     status: "initialized",
   };

@@ -84,12 +84,18 @@ export function applyToolResult(
       ...searchResultsToEvidence(matches),
     ]);
 
-    if (
-      action.input.query === "connection.release"
-    ) {
+    if (action.input.query === "pool.connect") {
+      nextState.currentObjective =
+        "check connection release";
+    }
+
+    if (action.input.query === "connection.release") {
       nextState.hypotheses = generateHypotheses(
         nextState.evidence,
       );
+
+      nextState.currentObjective =
+        "verify hypothesis";
     }
 
     return nextState;
@@ -108,6 +114,8 @@ export function applyToolResult(
       result.status === "confirmed"
         ? "confirmed"
         : "failed";
+
+    nextState.currentObjective = "complete";
 
     return nextState;
   }

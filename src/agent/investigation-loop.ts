@@ -34,6 +34,7 @@ export async function runInvestigationLoop(
 
     if (
       state.status === "investigating" &&
+      state.currentObjective === "verify hypothesis" &&
       state.hypotheses.length === 0
     ) {
       state = {
