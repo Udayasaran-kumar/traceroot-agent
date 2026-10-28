@@ -1,0 +1,3 @@
+GET /health 200
+POST /orders 500
+Error: Connection pool exhausted

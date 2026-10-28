@@ -6,6 +6,7 @@ dist/
 coverage/
 
 *.log
+!incidents/**/evidence/application.log
 
 evaluation-output/
 agent-traces/
